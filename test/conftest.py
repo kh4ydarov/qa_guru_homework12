@@ -8,19 +8,16 @@ from dotenv import load_dotenv
 
 
 @pytest.fixture(scope='function', autouse=True)
-def config_browser_window():
-    browser.config.window_height = 1080
-    browser.config.window_width = 1920
-    browser.config.base_url = 'https://demoqa.com'
-
-
-@pytest.fixture(scope='function', autouse=True)
 def load_env():
     load_dotenv()
 
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_browser(request):
+    browser.config.window_height = 1080
+    browser.config.window_width = 1920
+    browser.config.base_url = 'https://demoqa.com'
+
     options = Options()
     selenoid_capabilities = {
         "browserName": "chrome",
@@ -39,11 +36,6 @@ def setup_browser(request):
         command_executor=f"https://{login}:{password}@selenoid.autotests.cloud/wd/hub",
         options=options
     )
-
-    # driver = webdriver.Remote(
-    #     command_executor=f"https://user1:1234@selenoid.autotests.cloud/wd/hub",
-    #     options=options
-    # )
 
     browser.config.driver = driver
     yield browser
